@@ -19,10 +19,23 @@ fn main() {
         return;
     }
 
-    let prefix = &args[1];
+    let prefix = args[1].to_lowercase();
+    if prefix.len() <= 4 {
+        println!("Prefix is too short");
+        return;
+    }
     if prefix.get(0..4) != Some("bc1p") {
         println!("Invalid prefix, must begin with bc1p");
         return;
+    }
+
+    const CHARSET: &str = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
+    let prefix_split: Vec<&str> = prefix.split("1").collect();
+    for pc in prefix_split[1].chars() {
+        if !CHARSET.contains(pc) {
+            println!("Invalid character in prefix");
+            return;
+        }
     }
 
     let secp = Secp256k1::new();
