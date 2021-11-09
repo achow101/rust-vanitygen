@@ -9,9 +9,21 @@ use bitcoin::secp256k1::Secp256k1;
 use bitcoin::util::address::Address;
 use bitcoin::util::taproot::TapTweakHash;
 
+use std::env;
+
 fn main() {
 
-    const PREFIX: &str = "bc1ponet";
+    let args: Vec<String> = env::args().collect();
+    if args.len() != 2 {
+        println!("Invalid number of args");
+        return;
+    }
+
+    let prefix = &args[1];
+    if prefix.get(0..4) != Some("bc1p") {
+        println!("Invalid prefix, must begin with bc1p");
+        return;
+    }
 
     let secp = Secp256k1::new();
 
@@ -33,7 +45,7 @@ fn main() {
 
         let addr = Address::p2tr(output_pubkey, Network::Bitcoin);
 
-        if addr.to_string().get(0..PREFIX.len()) == Some(PREFIX) {
+        if addr.to_string().get(0..prefix.len()) == Some(&prefix) {
             println!("internal_pubkey: {}", internal_pubkey);
             println!("output_pubkey: {}", output_pubkey);
             println!("Address: {}", addr);
