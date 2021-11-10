@@ -8,6 +8,7 @@ use bitcoin::secp256k1::rand::rngs::OsRng;
 use bitcoin::secp256k1::Secp256k1;
 use bitcoin::util::address::Address;
 use bitcoin::util::taproot::TapTweakHash;
+use bitcoin::util::ecdsa::PrivateKey;
 
 use std::env;
 
@@ -59,6 +60,8 @@ fn main() {
         let addr = Address::p2tr(output_pubkey, Network::Bitcoin);
 
         if addr.to_string().get(0..prefix.len()) == Some(&prefix) {
+            let internal_privkey = PrivateKey::from_slice(&internal_seckey.serialize_secret(), Network::Bitcoin).unwrap();
+            println!("internal_privkey: {}", internal_privkey.to_wif());
             println!("internal_pubkey: {}", internal_pubkey);
             println!("output_pubkey: {}", output_pubkey);
             println!("Address: {}", addr);
