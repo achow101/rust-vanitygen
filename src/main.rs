@@ -15,7 +15,7 @@ use std::env;
 fn main() {
 
     let args: Vec<String> = env::args().collect();
-    if args.len() != 2 {
+    if args.len() < 2 || args.len() > 3 {
         println!("Invalid number of args");
         return;
     }
@@ -39,6 +39,11 @@ fn main() {
         }
     }
 
+    let mut merkle_root: Vec<u8> = Vec::new();
+    if args.len() == 3 {
+        merkle_root = hex::decode(&args[2]).unwrap();
+    }
+
     let secp = Secp256k1::new();
 
     let mut rng = OsRng::new().unwrap();
@@ -48,6 +53,7 @@ fn main() {
 
         let mut tweak: Vec<u8> = Vec::new();
         tweak.extend_from_slice(&internal_pubkey.serialize());
+        tweak.extend_from_slice(&merkle_root);
         let mut engine = TapTweakHash::engine();
         engine.input(&tweak);
         let tweak_value: [u8; 32] = TapTweakHash::from_engine(engine).into_inner();

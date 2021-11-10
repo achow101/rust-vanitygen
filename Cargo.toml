@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 bitcoin = { path = "../rust-bitcoin", features = ["rand", "use-serde"] }
+hex = "0.4"
 
 [patch.crates-io]
 secp256k1 = { path = "../rust-secp256k1" }

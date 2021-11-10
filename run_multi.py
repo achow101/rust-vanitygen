@@ -7,11 +7,16 @@ import time
 parser = argparse.ArgumentParser()
 parser.add_argument("prefix", help="Prefix to search for")
 parser.add_argument("--processes", "-j", type=int, help="Number of processes", default=1)
+parser.add_argument("--merkle", help="Merkle root")
 args = parser.parse_args()
+
+cmd = ["target/release/rust-vanitygen", args.prefix]
+if args.merkle:
+    cmd.append(args.merkle)
 
 procs = []
 for _ in range(0, args.processes):
-    procs.append(subprocess.Popen(["target/release/rust-vanitygen", args.prefix]))
+    procs.append(subprocess.Popen(cmd))
 
 done = False
 while not done:
