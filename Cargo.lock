@@ -17,6 +17,7 @@ checksum = "cf9ff0bbfd639f15c74af777d81383cf53efb7c93613f6cab67c6c11e05bbf8b"
 [[package]]
 name = "bitcoin"
 version = "0.27.0"
+source = "git+https://github.com/rust-bitcoin/rust-bitcoin#a961ab452657a2e94925632747a1794b768c17a6"
 dependencies = [
  "bech32",
  "bitcoin_hashes",
@@ -41,9 +42,9 @@ checksum = "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
 
 [[package]]
 name = "cc"
-version = "1.0.71"
+version = "1.0.72"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "79c2681d6594606957bbb8631c4b90a7fcaaa72cdb714743a437b156d6a7eedd"
+checksum = "22a9137b95ea06864e018375b72adfb7db6e6f68cfc8df5a04d00288050485ee"
 
 [[package]]
 name = "cloudabi"
@@ -216,6 +217,7 @@ dependencies = [
 [[package]]
 name = "secp256k1"
 version = "0.20.3"
+source = "git+https://github.com/rust-bitcoin/rust-secp256k1#96d2242f6abdbebc2b3c162e9eceb70c726afe6c"
 dependencies = [
  "rand",
  "secp256k1-sys",
@@ -225,6 +227,7 @@ dependencies = [
 [[package]]
 name = "secp256k1-sys"
 version = "0.4.1"
+source = "git+https://github.com/rust-bitcoin/rust-secp256k1#96d2242f6abdbebc2b3c162e9eceb70c726afe6c"
 dependencies = [
  "cc",
 ]
