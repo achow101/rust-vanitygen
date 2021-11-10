@@ -17,7 +17,6 @@ checksum = "cf9ff0bbfd639f15c74af777d81383cf53efb7c93613f6cab67c6c11e05bbf8b"
 [[package]]
 name = "bitcoin"
 version = "0.27.0"
-source = "git+https://github.com/rust-bitcoin/rust-bitcoin#a961ab452657a2e94925632747a1794b768c17a6"
 dependencies = [
  "bech32",
  "bitcoin_hashes",
@@ -210,8 +209,6 @@ dependencies = [
 [[package]]
 name = "secp256k1"
 version = "0.20.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "97d03ceae636d0fed5bae6a7f4f664354c5f4fcedf6eef053fef17e49f837d0a"
 dependencies = [
  "rand",
  "secp256k1-sys",
@@ -221,8 +218,6 @@ dependencies = [
 [[package]]
 name = "secp256k1-sys"
 version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "827cb7cce42533829c792fc51b82fbf18b125b45a702ef2c8be77fce65463a7b"
 dependencies = [
  "cc",
 ]

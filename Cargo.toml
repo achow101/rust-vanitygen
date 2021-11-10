@@ -6,4 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bitcoin = { git = "https://github.com/rust-bitcoin/rust-bitcoin", features = ["rand", "use-serde"] }
+bitcoin = { path = "../rust-bitcoin", features = ["rand", "use-serde"] }
+
+[patch.crates-io]
+secp256k1 = { path = "../rust-secp256k1" }
