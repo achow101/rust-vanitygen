@@ -1,14 +1,13 @@
 extern crate bitcoin;
 
-use bitcoin::hashes::Hash;
-use bitcoin::hashes::HashEngine;
+use bitcoin::hashes::hex::FromHex;
 use bitcoin::network::constants::Network;
-use bitcoin::schnorr::PublicKey;
-use bitcoin::secp256k1::rand::rngs::OsRng;
+use bitcoin::secp256k1::rand;
 use bitcoin::secp256k1::Secp256k1;
+use bitcoin::secp256k1::SecretKey;
 use bitcoin::util::address::Address;
-use bitcoin::util::taproot::TapTweakHash;
-use bitcoin::util::ecdsa::PrivateKey;
+use bitcoin::util::key::PrivateKey;
+use bitcoin::util::taproot::TapBranchHash;
 
 use std::env;
 
@@ -39,37 +38,23 @@ fn main() {
         }
     }
 
-    let mut merkle_root: Vec<u8> = Vec::new();
+    let mut merkle_root: Option<TapBranchHash> = None;
     if args.len() == 3 {
-        merkle_root = hex::decode(&args[2]).unwrap();
+        merkle_root = Some(TapBranchHash::from_hex(&args[2]).unwrap());
     }
 
     let secp = Secp256k1::new();
 
-    let mut rng = OsRng::new().unwrap();
-
     loop {
-        let (internal_seckey, internal_pubkey) = secp.generate_schnorrsig_keypair(&mut rng);
+        let internal_seckey = SecretKey::new(&mut rand::thread_rng());
+        let internal_privkey = PrivateKey::new(internal_seckey, Network::Bitcoin);
+        let (internal_pubkey, _) = internal_seckey.x_only_public_key(&secp);
 
-        let mut tweak: Vec<u8> = Vec::new();
-        tweak.extend_from_slice(&internal_pubkey.serialize());
-        tweak.extend_from_slice(&merkle_root);
-        let mut engine = TapTweakHash::engine();
-        engine.input(&tweak);
-        let tweak_value: [u8; 32] = TapTweakHash::from_engine(engine).into_inner();
-
-        let mut output_seckey = internal_seckey.clone();
-        output_seckey.tweak_add_assign(&secp, &tweak_value).unwrap();
-
-        let output_pubkey = PublicKey::from_keypair(&secp, &output_seckey);
-
-        let addr = Address::p2tr(output_pubkey, Network::Bitcoin);
+        let addr = Address::p2tr(&secp, internal_pubkey, merkle_root, Network::Bitcoin);
 
         if addr.to_string().get(0..prefix.len()) == Some(&prefix) {
-            let internal_privkey = PrivateKey::from_slice(&internal_seckey.serialize_secret(), Network::Bitcoin).unwrap();
             println!("internal_privkey: {}", internal_privkey.to_wif());
             println!("internal_pubkey: {}", internal_pubkey);
-            println!("output_pubkey: {}", output_pubkey);
             println!("Address: {}", addr);
             break;
         }
